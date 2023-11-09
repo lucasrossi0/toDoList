@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let btn = document.createElement("button");
     let p = document.createElement("p");
     // creating html tags fot the to do tasks
-
     add(div, p, btn);
+
     // calling the function that adds those html tags to the dom
 
     btn.addEventListener("click", () => {
