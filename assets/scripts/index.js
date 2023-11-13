@@ -14,10 +14,64 @@ document.addEventListener("DOMContentLoaded", () => {
     let li = createLi();
     li.innerText = text;
     list.appendChild(li);
+    cleanInput();
+    createRemoveBtn(li);
+    saveTasks();
   }
 
+  function cleanInput() {
+    inpTask.value = "";
+    inpTask.focus();
+  }
+
+  function createRemoveBtn(li) {
+    let btnRemove = document.createElement("button");
+    btnRemove.innerText = "Remove";
+    btnRemove.setAttribute("id", "btnRemove");
+    li.appendChild(btnRemove);
+  }
+
+  function saveTasks() {
+    let liTasks = list.querySelectorAll("li");
+    let listTasks = [];
+
+    for (let tasks of liTasks) {
+      let taskText = tasks.innerText;
+      taskText = taskText.replace("Remove", "").trim();
+      listTasks.push(taskText);
+    }
+    let tasksJSON = JSON.stringify(listTasks);
+    localStorage.setItem("tasks", tasksJSON);
+  }
+
+  function addSavedTasks() {
+    let tasks = localStorage.getItem("tasks");
+    let taskList = JSON.parse(tasks);
+    for (let task of taskList) {
+      createTask(task);
+    }
+  }
+
+  addSavedTasks();
+
+  inpTask.addEventListener("keypress", (e) => {
+    if (e.keyCode === 13) {
+      if (!inpTask.value) return;
+      createTask(inpTask.value);
+    }
+  });
+
   btnAdd.addEventListener("click", () => {
+    if (!inpTask.value) return;
     createTask(inpTask.value);
+  });
+
+  document.addEventListener("click", (e) => {
+    let el = e.target;
+    if (el.id === "btnRemove") {
+      el.parentElement.remove();
+      saveTasks();
+    }
   });
 
   /*   btnAdd.addEventListener("click", () => {
